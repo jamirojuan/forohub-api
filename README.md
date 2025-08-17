@@ -14,7 +14,7 @@ Se implementa el CRUD de **Tópicos** y un **login** para obtener el token.
 - DevTools (opcional en dev)
 
 ## Requisitos
-- Java 21
+- Java 17
 - Maven 3.9+
 - MySQL 8.x
 
@@ -37,7 +37,7 @@ Flyway creará las tablas y un usuario admin por defecto:
 - **password:** `123456`
 
 ## Autenticación
-1. `POST /api/auth/login`
+1. `POST /login`
 ```json
 { "email": "admin@foro.com", "password": "123456" }
 ```
@@ -48,18 +48,18 @@ Authorization: Bearer <JWT>
 ```
 
 ## Endpoints de Tópicos
-- `POST /api/topicos` (autenticado) – crea tópico
-- `GET /api/topicos` – lista todos
-- `GET /api/topicos/{id}` – obtiene por id
-- `PUT /api/topicos/{id}` (autenticado) – actualiza
-- `DELETE /api/topicos/{id}` (autenticado) – elimina
+- `POST /topicos` (autenticado) – crea tópico
+- `GET /topicos` – lista todos
+- `GET /topicos/{id}` – obtiene por id
+- `PUT /topicos/{id}` (autenticado) – actualiza
+- `DELETE /topicos/{id}` (autenticado) – elimina
 
 Cuerpo de creación:
 ```json
 {
   "titulo": "Mi primer tópico",
   "mensaje": "Contenido del tópico",
-  "curso": "Java"
+  "curso": "ALURA 552 Equipo 2"
 }
 ```
 
@@ -68,5 +68,3 @@ Cuerpo de creación:
 - `status` por defecto es `ABIERTO`. Se puede actualizar a `CERRADO` vía `PUT`.
 - `respuestas` empieza en 0 (la entidad Respuesta **no** está implementada).
 
-## Licencia
-MIT
