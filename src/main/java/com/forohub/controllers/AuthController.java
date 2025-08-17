@@ -13,14 +13,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/login")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthenticationManager authManager;
     private final JwtService jwtService;
 
-    @PostMapping("/login")
+    @PostMapping
     public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest req) {
         Authentication auth = authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.email(), req.password())

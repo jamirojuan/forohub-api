@@ -5,6 +5,7 @@ import com.forohub.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -54,10 +55,22 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
            .authorizeHttpRequests(auth -> auth
-                   .requestMatchers("/api/auth/**", "/actuator/health").permitAll()
+                   .requestMatchers("/login","/error","/error/**").permitAll()
                    .anyRequest().authenticated()
            )
-           .httpBasic(Customizer.withDefaults())
+           .exceptionHandling(ex ->ex
+                   .authenticationEntryPoint((request, response, authException) -> {
+                       response.setStatus(HttpStatus.UNAUTHORIZED.value());//401
+                       response.setContentType("application/json");
+                       response.getWriter().write("{\"error\":\"unauthorized\",\"message\":\"Token ausente o inválido\"}");
+                   })
+                   .accessDeniedHandler((request, response, accessDeniedException) -> {
+                       response.setStatus(HttpStatus.FORBIDDEN.value());//403
+                       response.setContentType("application/json");
+                       response.getWriter().write("{\"error\":\"forbidden\",\"message\":\"Acceso denegado\"}");
+                   })
+
+           )
            .authenticationProvider(authenticationProvider())
            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

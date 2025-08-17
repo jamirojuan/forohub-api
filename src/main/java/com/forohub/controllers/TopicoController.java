@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/topicos")
+@RequestMapping("/topicos")
 @RequiredArgsConstructor
 public class TopicoController {
 
@@ -29,19 +29,20 @@ public class TopicoController {
         return service.listar();
     }
 
-    @GetMapping("{id}")
-    public TopicoResponse obtener(@PathVariable Long id) {
-        return service.obtener(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<TopicoResponse> obtener(@PathVariable("id") Long id) {
+
+        return ResponseEntity.ok(service.obtener(id));
     }
 
-    @PutMapping("{id}")
-    public TopicoResponse actualizar(@PathVariable Long id, @RequestBody @Valid TopicoUpdateRequest req) {
+    @PutMapping("/{id}")
+    public TopicoResponse actualizar(@PathVariable("id") Long id, @RequestBody @Valid TopicoUpdateRequest req) {
         return service.actualizar(id, req);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void eliminar(@PathVariable Long id) {
+    public void eliminar(@PathVariable("id") Long id) {
         service.eliminar(id);
     }
 }
